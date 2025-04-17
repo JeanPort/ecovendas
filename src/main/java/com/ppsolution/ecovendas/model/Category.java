@@ -3,7 +3,6 @@ package com.ppsolution.ecovendas.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,14 +23,10 @@ public class Category {
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "price")
-    private BigDecimal price;
-    @Column(name = "stockQuantity")
-    private Integer stock_quantity;
     @Column(name = "active")
     private Integer active;
     @Column(name = "createdAt")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
