@@ -6,6 +6,8 @@ import com.ppsolution.ecovendas.mapper.CategoryMapper;
 import com.ppsolution.ecovendas.model.Category;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
 
@@ -17,6 +19,8 @@ public class CategoryMapperImpl implements CategoryMapper {
                 .name(categoryRequest.name())
                 .description(categoryRequest.description())
                 .active(1)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 

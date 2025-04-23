@@ -9,7 +9,7 @@ public interface CategoryService {
 
     CategoryResponse createCatory(CategoryRequest categoryRequest);
     CategoryResponse updateCategory(Long idCategory, CategoryRequest categoryRequest);
-    CategoryResponse disableCatory(Long idCategory);
+    void disableCatory(Long idCategory);
     List<CategoryResponse> getAllCatorys();
     CategoryResponse getCatoryById(Long id);
 

@@ -31,22 +31,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(Long idCategory, CategoryRequest categoryRequest) {
-        categoryRepository.findById(idCategory).orElseThrow(CategoryNotFoundException::new);
-        var category = mapper.toCategory(categoryRequest);
-        category.setId(idCategory);
-        existName(category.getName(), category.getId());
-        category = categoryRepository.save(category);
-        return mapper.toCategoryResponse(category);
+        var category = categoryRepository.findById(idCategory).orElseThrow(CategoryNotFoundException::new);
+        var categoryToSave = mapper.toCategory(categoryRequest);
+        categoryToSave.setId(idCategory);
+        categoryToSave.setCreatedAt(category.getCreatedAt());
+        existName(categoryToSave.getName(), categoryToSave.getId());
+        categoryToSave = categoryRepository.save(categoryToSave);
+        return mapper.toCategoryResponse(categoryToSave);
     }
 
 
 
     @Override
-    public CategoryResponse disableCatory(Long idCategory) {
+    public void disableCatory(Long idCategory) {
         var category = categoryRepository.findById(idCategory).orElseThrow(CategoryNotFoundException::new);
         category.setActive(0);
-        category = categoryRepository.save(category);
-        return mapper.toCategoryResponse(category);
+        categoryRepository.save(category);
     }
 
     @Override
