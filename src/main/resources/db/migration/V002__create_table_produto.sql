@@ -4,6 +4,7 @@ CREATE TABLE tbl_product (
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     description TEXT,
+    url_image VARCHAR(255),
     stock_quantity INT NOT NULL,
     active INT NOT NULL,
     category_id BIGINT NOT NULL,
