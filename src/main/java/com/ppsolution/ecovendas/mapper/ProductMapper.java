@@ -8,6 +8,7 @@ import com.ppsolution.ecovendas.model.Product;
 public interface ProductMapper {
 
     Product toProduct(ProductRequest productRequest);
+    Product toProduct(ProductRequest productRequest, Product product);
     ProductResponse toProductResponse(Product product);
     ProductFullResponse toProductFullResponse(Product product);
 }

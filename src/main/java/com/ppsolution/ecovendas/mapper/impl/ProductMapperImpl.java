@@ -34,6 +34,21 @@ public class ProductMapperImpl implements ProductMapper {
     }
 
     @Override
+    public Product toProduct(ProductRequest productRequest, Product product) {
+        if (productRequest == null) return null;
+        return Product.builder()
+                .name(productRequest.name())
+                .price(productRequest.price())
+                .active(product.getActive())
+                .description(productRequest.description())
+                .stockQuantity(productRequest.stockQuantity())
+                .urlImage(productRequest.urlImage())
+                .createdAt(product.getCreatedAt())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
+    @Override
     public ProductResponse toProductResponse(Product product) {
         if (product == null) return null;
         return new ProductResponse(
