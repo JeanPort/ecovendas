@@ -34,16 +34,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(ProductRequest productRequest, Long productId) {
+    public ProductFullResponse updateProduct(ProductRequest productRequest, Long productId) {
         var product = repository.findById(productId).orElseThrow(ProductNotFoundException::new);
         existsName(productRequest.name(), productId);
         var category = categoryRepository.findById(productRequest.idCategory()).orElseThrow(CategoryNotFoundException::new);
         var update = mapper.toProduct(productRequest, product);
         update.setCategory(category);
         update = repository.save(update);
-        return mapper.toProductResponse(update);
+        return mapper.toProductFullResponse(update);
     }
-    
+
 
     @Override
     public ProductFullResponse getProductById(Long productId) {

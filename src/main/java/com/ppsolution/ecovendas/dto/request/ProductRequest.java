@@ -13,7 +13,6 @@ public record ProductRequest(
         @NotNull @Size(min = 3, max = 255) String description,
         @Positive @NotNull BigDecimal price,
         @NotNull @Positive Integer stockQuantity,
-        @NotNull @Size(min = 3, max = 255) String urlImage,
         @NotNull Long idCategory
 ) {
 }

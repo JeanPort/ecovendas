@@ -27,7 +27,6 @@ public class ProductMapperImpl implements ProductMapper {
                 .active(1)
                 .description(productRequest.description())
                 .stockQuantity(productRequest.stockQuantity())
-                .urlImage(productRequest.urlImage())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -37,12 +36,12 @@ public class ProductMapperImpl implements ProductMapper {
     public Product toProduct(ProductRequest productRequest, Product product) {
         if (productRequest == null) return null;
         return Product.builder()
+                .id(product.getId())
                 .name(productRequest.name())
                 .price(productRequest.price())
                 .active(product.getActive())
                 .description(productRequest.description())
                 .stockQuantity(productRequest.stockQuantity())
-                .urlImage(productRequest.urlImage())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .build();

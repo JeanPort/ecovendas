@@ -1,9 +1,7 @@
 package com.ppsolution.ecovendas.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "tbl_product")
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Product {
 
