@@ -35,13 +35,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         try {
             tryDoFilterInternal(request, response, filterChain);
         }catch (TokenServiceException e){
-            var httpStatus = HttpStatus.UNAUTHORIZED;
-            var body = new ErrorResponse(httpStatus.getReasonPhrase(), e.getLocalizedMessage(), httpStatus.value(), e.getClass().getSimpleName(), LocalDateTime.now());
-            var json = objectMapper.writeValueAsString(body);
-            response.setStatus(httpStatus.value());
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json");
-            response.getWriter().write(json);
+            setResponseError(response, e);
         }
 
     }
@@ -63,6 +57,14 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    private static boolean isTokenPresent(String authorization) {
+        return authorization != null && authorization.startsWith(JwtBearerDefault.TOKEN_BEARER_DEFAULT);
+    }
+
+    private static boolean isEmailNotInContext(String email) {
+        return email != null && !email.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null;
+    }
+
     private void setAuthentication(HttpServletRequest request, String email) {
         var userDetail = userDetailsService.loadUserByUsername(email);
         var authentication = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
@@ -70,11 +72,13 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private static boolean isEmailNotInContext(String email) {
-        return email != null && !email.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null;
-    }
-
-    private static boolean isTokenPresent(String authorization) {
-        return authorization != null && authorization.startsWith(JwtBearerDefault.TOKEN_BEARER_DEFAULT);
+    private void setResponseError(HttpServletResponse response, TokenServiceException e) throws IOException {
+        var httpStatus = HttpStatus.UNAUTHORIZED;
+        var body = new ErrorResponse(httpStatus.getReasonPhrase(), e.getLocalizedMessage(), httpStatus.value(), e.getClass().getSimpleName(), LocalDateTime.now());
+        var json = objectMapper.writeValueAsString(body);
+        response.setStatus(httpStatus.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(json);
     }
 }
