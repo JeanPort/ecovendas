@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "com.ppsolution.ecovendas.service.token.jjwt")
 public class JjwtConfigProperties {
 
-    private final String accessTokenSigingKey;
-    private final Long accessTokenExpirationInSeconds;
-    private final String refreshTokenSigingKey;
-    private final Long refreshTokenExpirationInSeconds;
+    private  String accessTokenSigingKey;
+    private  Long accessTokenExpirationInSeconds;
+    private  String refreshTokenSigingKey;
+    private  Long refreshTokenExpirationInSeconds;
 }
