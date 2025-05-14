@@ -1,0 +1,36 @@
+package com.ppsolution.ecovendas.controller;
+
+import com.ppsolution.ecovendas.dto.request.UserLoginRequest;
+import com.ppsolution.ecovendas.dto.request.UserRequest;
+import com.ppsolution.ecovendas.dto.response.LoginResponse;
+import com.ppsolution.ecovendas.dto.response.UserResponse;
+import com.ppsolution.ecovendas.model.User;
+import com.ppsolution.ecovendas.repository.UserRepository;
+import com.ppsolution.ecovendas.service.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
+public class AuthRestController {
+
+    private final AuthService service;
+    private final UserRepository repository;
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest){
+        var userResponse = service.register(userRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginRequest loginRequest){
+        var loginResponse = service.login(loginRequest);
+        return ResponseEntity.ok(loginResponse);
+    }
+
+}

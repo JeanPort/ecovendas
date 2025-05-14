@@ -31,7 +31,8 @@ public class SecurityConfig {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("/api/v1/products/**").permitAll()
                                 .requestMatchers("/api/v1/categories/**").permitAll()
-                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN"))
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/auth/**").permitAll())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(authenticationEntryPoint));

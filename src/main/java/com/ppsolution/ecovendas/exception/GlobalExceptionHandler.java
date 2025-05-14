@@ -34,4 +34,16 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now());
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(PasswordValidationException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordValidationException(PasswordValidationException e){
+        var status = HttpStatus.BAD_REQUEST;
+        var error = new ErrorResponse(
+                status.getReasonPhrase(),
+                e.getLocalizedMessage(),
+                status.value(),
+                e.getClass().getSimpleName(),
+                LocalDateTime.now());
+        return ResponseEntity.status(status).body(error);
+    }
 }

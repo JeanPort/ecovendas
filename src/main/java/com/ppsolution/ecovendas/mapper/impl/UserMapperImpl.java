@@ -4,6 +4,7 @@ import com.ppsolution.ecovendas.dto.request.UserRequest;
 import com.ppsolution.ecovendas.dto.response.UserResponse;
 import com.ppsolution.ecovendas.mapper.UserMapper;
 import com.ppsolution.ecovendas.model.User;
+import com.ppsolution.ecovendas.model.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class UserMapperImpl implements UserMapper {
                 .name(userRequest.name())
                 .created_at(LocalDateTime.now())
                 .updated_at(LocalDateTime.now())
-                .role(userRequest.role() == null ? null: userRequest.role())
+                .role(userRequest.role() == null ? Role.CUSTOMER : userRequest.role())
                 .build();
     }
 
