@@ -23,15 +23,16 @@ public class UserMapperImpl implements UserMapper {
                 .phone(userRequest.phone())
                 .email(userRequest.email())
                 .name(userRequest.name())
-                .created_at(LocalDateTime.now())
-                .updated_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .role(userRequest.role() == null ? Role.CUSTOMER : userRequest.role())
                 .build();
     }
 
+
     @Override
     public UserResponse toUserResponse(User user) {
         if (user == null) return null;
-        return new UserResponse(user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getRole(), user.getCreated_at(), user.getUpdated_at());
+        return new UserResponse(user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getRole(), user.getCreatedAt(), user.getUpdatedAt());
     }
 }

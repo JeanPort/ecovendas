@@ -4,6 +4,8 @@ import com.ppsolution.ecovendas.dto.request.UserRequest;
 import com.ppsolution.ecovendas.dto.response.UserResponse;
 import com.ppsolution.ecovendas.model.User;
 
+import java.time.LocalDateTime;
+
 public interface UserMapper {
 
     User toUser(UserRequest userRequest);
