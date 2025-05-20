@@ -4,17 +4,19 @@ import com.ppsolution.ecovendas.dto.request.CategoryRequest;
 import com.ppsolution.ecovendas.dto.response.CategoryResponse;
 import com.ppsolution.ecovendas.service.CategoryService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/categories")
 public class AdminCategoryRestController {
 
     private final CategoryService categoryService;
+
+    public AdminCategoryRestController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest categoryRequest){

@@ -6,25 +6,29 @@ import com.ppsolution.ecovendas.exception.EmailAlreadyInUseException;
 import com.ppsolution.ecovendas.exception.UserNotFoundException;
 import com.ppsolution.ecovendas.mapper.UserMapper;
 import com.ppsolution.ecovendas.model.AuthenticatedUser;
+import com.ppsolution.ecovendas.model.User;
 import com.ppsolution.ecovendas.repository.UserRepository;
 import com.ppsolution.ecovendas.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
+
     @Override
     public UserResponse getUserAuthenticate() {
-        var authentication = getAuthenticatedUser();
-        return userMapper.toUserResponse(authentication.getUser());
+        var user = getAuthenticatedUser();
+        return userMapper.toUserResponse(user);
     }
 
 
@@ -56,11 +60,11 @@ public class UserServiceImpl implements UserService {
         userToUpdate = userRepository.save(userToUpdate);
         return userMapper.toUserResponse(userToUpdate);
     }
-    
+
 
     @Override
     public UserResponse updateUserAuthenticate(UserRequest request) {
-        var user = getAuthenticatedUser().getUser();
+        var user = getAuthenticatedUser();
         var userToUpdate = userMapper.toUser(request);
         userToUpdate.setId(user.getId());
         userToUpdate.setCreatedAt(user.getCreatedAt());
@@ -70,8 +74,9 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private static AuthenticatedUser getAuthenticatedUser() {
-        return (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication();
+    private static User getAuthenticatedUser() {
+        var authenticated = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return authenticated.getUser();
     }
 
     private void existsId(String email, Long id) {

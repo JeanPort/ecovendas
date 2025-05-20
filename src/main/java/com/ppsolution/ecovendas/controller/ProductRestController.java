@@ -3,7 +3,6 @@ package com.ppsolution.ecovendas.controller;
 import com.ppsolution.ecovendas.dto.response.ProductFullResponse;
 import com.ppsolution.ecovendas.dto.response.ProductResponse;
 import com.ppsolution.ecovendas.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
-@RequiredArgsConstructor
 public class ProductRestController {
 
     private final ProductService service;
+
+    public ProductRestController(ProductService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts(){

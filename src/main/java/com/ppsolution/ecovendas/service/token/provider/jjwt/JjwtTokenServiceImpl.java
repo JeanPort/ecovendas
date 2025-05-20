@@ -22,7 +22,7 @@ public class JjwtTokenServiceImpl implements TokenService {
     @Override
     public String gerarAccessToken(String subject) {
 
-        return gerarToken(properties.getAccessTokenExpirationInSeconds(), properties.getAccessTokenSigingKey());
+        return gerarToken(subject, properties.getAccessTokenExpirationInSeconds(), properties.getAccessTokenSigingKey());
     }
 
 
@@ -36,7 +36,7 @@ public class JjwtTokenServiceImpl implements TokenService {
 
     @Override
     public String gerarRefreshToken(String subject) {
-        return gerarToken(properties.getRefreshTokenExpirationInSeconds(), properties.getRefreshTokenSigingKey());
+        return gerarToken(subject, properties.getRefreshTokenExpirationInSeconds(), properties.getRefreshTokenSigingKey());
     }
 
     @Override
@@ -45,15 +45,15 @@ public class JjwtTokenServiceImpl implements TokenService {
     }
 
 
-    private String gerarToken(Long expirationInSeconds, String sigingKey) {
+    private String gerarToken(String subject, Long expirationInSeconds, String sigingKey) {
         var dataHoraAtual = Instant.now();
         var dataHoraExpiration = dataHoraAtual.plusSeconds(expirationInSeconds);
 
         return Jwts.builder()
                 .setClaims(new HashMap<String, Object>())
-                .setSubject(sigingKey)
+                .setSubject(subject)
                 .setIssuedAt(Date.from(dataHoraExpiration))
-                .signWith(Keys.hmacShaKeyFor(properties.getAccessTokenSigingKey().getBytes()))
+                .signWith(Keys.hmacShaKeyFor(sigingKey.getBytes()))
                 .compact();
     }
 
@@ -67,10 +67,11 @@ public class JjwtTokenServiceImpl implements TokenService {
     }
 
     private static Claims tryGetClaims(String token, String sigingKey) {
-        return Jwts.parserBuilder()
+        var teste = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(sigingKey.getBytes()))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        return teste;
     }
 }

@@ -2,7 +2,6 @@ package com.ppsolution.ecovendas.controller;
 
 import com.ppsolution.ecovendas.dto.response.CategoryResponse;
 import com.ppsolution.ecovendas.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categories")
-@RequiredArgsConstructor
 public class CategoryRestController {
 
     private final CategoryService service;
+
+    public CategoryRestController(CategoryService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAll(){

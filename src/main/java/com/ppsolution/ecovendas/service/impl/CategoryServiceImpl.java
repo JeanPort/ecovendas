@@ -7,17 +7,20 @@ import com.ppsolution.ecovendas.exception.NameAlreadyInUseException;
 import com.ppsolution.ecovendas.mapper.CategoryMapper;
 import com.ppsolution.ecovendas.repository.CategoryRepository;
 import com.ppsolution.ecovendas.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper mapper;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper mapper) {
+        this.categoryRepository = categoryRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public CategoryResponse createCatory(CategoryRequest categoryRequest) {

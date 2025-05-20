@@ -10,18 +10,22 @@ import com.ppsolution.ecovendas.mapper.ProductMapper;
 import com.ppsolution.ecovendas.repository.CategoryRepository;
 import com.ppsolution.ecovendas.repository.ProductRepository;
 import com.ppsolution.ecovendas.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper mapper;
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
+
+    public ProductServiceImpl(ProductMapper mapper, ProductRepository repository, CategoryRepository categoryRepository) {
+        this.mapper = mapper;
+        this.repository = repository;
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public ProductFullResponse createProduct(ProductRequest productRequest) {

@@ -10,13 +10,11 @@ import com.ppsolution.ecovendas.mapper.UserMapper;
 import com.ppsolution.ecovendas.repository.UserRepository;
 import com.ppsolution.ecovendas.service.AuthService;
 import com.ppsolution.ecovendas.service.token.TokenService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -25,6 +23,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper mapper;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+
+    public AuthServiceImpl(PasswordEncoder encoder, UserRepository userRepository, UserMapper mapper, AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.encoder = encoder;
+        this.userRepository = userRepository;
+        this.mapper = mapper;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public UserResponse register(UserRequest userRequest) {
@@ -37,8 +43,6 @@ public class AuthServiceImpl implements AuthService {
 
         return mapper.toUserResponse(user);
     }
-
-
 
 
     @Override
