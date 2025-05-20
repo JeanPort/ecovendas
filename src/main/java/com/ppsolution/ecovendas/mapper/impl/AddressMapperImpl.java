@@ -16,15 +16,15 @@ public class AddressMapperImpl implements AddressMapper {
     public Address toAddress(AddressRequest addressRequest) {
         if (addressRequest == null) return null;
 
-        return Address.builder()
-                .city(addressRequest.city())
-                .state(addressRequest.state())
-                .number(addressRequest.number())
-                .complement(addressRequest.complement())
-                .isDefault(addressRequest.isDefault() == null ? 1: addressRequest.isDefault())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        var addres = new Address();
+        addres.setCity(addressRequest.city());
+        addres.setState(addressRequest.state());
+        addres.setNumber(addressRequest.number());
+        addres.setComplement(addressRequest.complement());
+        addres.setIsDefault(addressRequest.isDefault() == null ? 1: addressRequest.isDefault());
+        addres.setCreatedAt(LocalDateTime.now());
+        addres.setUpdatedAt(LocalDateTime.now());
+        return addres;
     }
 
     @Override

@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userToUpdate);
     }
 
-
-    private static User getAuthenticatedUser() {
+    @Override
+    public User getAuthenticatedUser() {
         var authenticated = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return authenticated.getUser();
     }
