@@ -33,6 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/categories/**").permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/users/**").authenticated()
+                                .requestMatchers("/api/v1/address/**").authenticated()
                                 .requestMatchers("/api/v1/auth/**").permitAll())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

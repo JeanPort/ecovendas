@@ -46,6 +46,7 @@ public class AddressServiceImpl implements AddressService {
         var addressToSave = mapper.toAddress(addressRequest);
         addressToSave.setCreatedAt(address.getCreatedAt());
         addressToSave.setId(address.getId());
+        addressToSave.setUser(address.getUser());
         addressToSave = repository.save(addressToSave);
         return mapper.toAddressResponse(addressToSave);
     }
@@ -55,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
         var address = getAddress(id);
         repository.delete(address);
     }
-    
+
     @Override
     public AddressResponse insertAddress(AddressRequest addressRequest) {
         var address = mapper.toAddress(addressRequest);

@@ -24,6 +24,8 @@ public class AddressMapperImpl implements AddressMapper {
         addres.setIsDefault(addressRequest.isDefault() == null ? 1: addressRequest.isDefault());
         addres.setCreatedAt(LocalDateTime.now());
         addres.setUpdatedAt(LocalDateTime.now());
+        addres.setZipCode(addressRequest.zipCode());
+        addres.setStreet(addressRequest.street());
         return addres;
     }
 
