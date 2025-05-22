@@ -33,6 +33,7 @@ public class AddressMapperImpl implements AddressMapper {
     public AddressResponse toAddressResponse(Address address) {
         if (address == null) return null;
         return new AddressResponse(
+                address.getId(),
                 address.getStreet(),
                 address.getNumber(),
                 address.getComplement(),

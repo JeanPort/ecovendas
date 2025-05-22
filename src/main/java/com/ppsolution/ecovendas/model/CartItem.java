@@ -1,5 +1,6 @@
 package com.ppsolution.ecovendas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class CartItem {
     private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
+    @JsonIgnoreProperties("items")
     private Cart cart;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
