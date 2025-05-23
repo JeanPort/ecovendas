@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -59,25 +56,30 @@ public class GlobalExceptionHandler {
         var status = HttpStatus.BAD_REQUEST;
         var errors = new HashMap<String, List<String>>();
         var fieldErrors = e.getBindingResult().getFieldErrors();
+        var message = "Erro de validação";
 
-        fieldErrors.stream().forEach(fieldError -> {
-            var fieldName = fieldError.getField();
-            if (errors.containsKey(fieldName)){
-                errors.get(fieldName).add(fieldError.getDefaultMessage());
-            }else {
-                var listMessages = new ArrayList<>(List.of(fieldError.getDefaultMessage()));
-                errors.put(fieldName, listMessages);
-            }
-        });
+        setErrors(fieldErrors, errors);
 
         var error = new ErrorValidateResponse(
                 status.getReasonPhrase(),
-                e.getLocalizedMessage(),
+                message,
                 status.value(),
                 e.getClass().getSimpleName(),
                 LocalDateTime.now(),
                 errors
                 );
         return ResponseEntity.status(status).body(error);
+    }
+
+    private static void setErrors(List<FieldError> fieldErrors, HashMap<String, List<String>> errors) {
+        fieldErrors.forEach(fieldError -> {
+            var fieldName = fieldError.getField();
+            if (errors.containsKey(fieldName)){
+                errors.get(fieldName).add(fieldError.getDefaultMessage());
+            }else {
+                var listMessages = new ArrayList<>(List.of(Objects.requireNonNull(fieldError.getDefaultMessage())));
+                errors.put(fieldName, listMessages);
+            }
+        });
     }
 }
