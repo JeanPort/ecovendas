@@ -32,7 +32,14 @@ public class CartMapperImpl implements CartMapper {
             totalItems += cartItemResponse.quantity();
             totalPrice = totalPrice.add(cartItemResponse.subTotal());
         }
-        
-        return new CartResponse(cart.getId(), itemsResponse, totalItems, totalPrice, cart.getCreatedAt(), cart.getUpdated_at());
+
+        return new CartResponse(
+                cart.getId(),
+                itemsResponse,
+                totalItems,
+                totalPrice,
+                cart.getCreatedAt(),
+                cart.getUpdatedAt()
+        );
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,14 +19,23 @@ public class Cart {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updatedAt")
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("cart")
-    private List<CartItem> items;
+    private List<CartItem> items = new ArrayList<>();
+
+    public Cart(User user) {
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Cart() {
+    }
 
     public List<CartItem> getItems() {
         return items;
@@ -51,12 +61,12 @@ public class Cart {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public User getUser() {
@@ -65,6 +75,10 @@ public class Cart {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void addItems(CartItem item) {
+        this.items.add(item);
     }
 
     @Override
@@ -84,7 +98,7 @@ public class Cart {
         return "Cart{" +
                 "id=" + id +
                 ", createdAt=" + createdAt +
-                ", updated_at=" + updated_at +
+                ", updated_at=" + updatedAt +
                 ", user=" + user +
                 '}';
     }
