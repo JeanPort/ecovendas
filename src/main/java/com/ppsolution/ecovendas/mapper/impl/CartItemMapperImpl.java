@@ -4,6 +4,7 @@ import com.ppsolution.ecovendas.dto.request.CartItemRequest;
 import com.ppsolution.ecovendas.dto.response.CartItemResponse;
 import com.ppsolution.ecovendas.exception.ProductNotFoundException;
 import com.ppsolution.ecovendas.mapper.CartItemMapper;
+import com.ppsolution.ecovendas.model.Cart;
 import com.ppsolution.ecovendas.model.CartItem;
 import com.ppsolution.ecovendas.model.Product;
 import com.ppsolution.ecovendas.model.User;
@@ -17,11 +18,6 @@ import java.util.List;
 @Component
 public class CartItemMapperImpl implements CartItemMapper {
 
-    private final ProductRepository productRepository;
-
-    public CartItemMapperImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     @Override
     public CartItemResponse toCartItemResponse(CartItem item) {
@@ -46,15 +42,14 @@ public class CartItemMapperImpl implements CartItemMapper {
     }
 
     @Override
-    public CartItem toCartItem(CartItemRequest request) {
+    public CartItem toCartItem(CartItemRequest request, Cart cart, Product product) {
         if (request == null) return null;
-
-        var product = productRepository.findById(request.productId()).orElseThrow(ProductNotFoundException::new);
 
         var item = new CartItem();
         item.setQuantity(request.quantity());
         item.setProduct(product);
         item.setPrice(product.getPrice());
+        item.setCart(cart);
         item.setCreatedAt(LocalDateTime.now());
         item.setUpdatedAt(LocalDateTime.now());
         return item;

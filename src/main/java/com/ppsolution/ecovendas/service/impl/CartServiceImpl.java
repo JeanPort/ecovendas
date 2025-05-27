@@ -7,10 +7,16 @@ import com.ppsolution.ecovendas.exception.ProductNotFoundException;
 import com.ppsolution.ecovendas.mapper.CartItemMapper;
 import com.ppsolution.ecovendas.mapper.CartMapper;
 import com.ppsolution.ecovendas.model.Cart;
+import com.ppsolution.ecovendas.model.CartItem;
 import com.ppsolution.ecovendas.repository.CartRepository;
+import com.ppsolution.ecovendas.repository.ProductRepository;
 import com.ppsolution.ecovendas.service.CartService;
 import com.ppsolution.ecovendas.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -19,13 +25,15 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartItemMapper cartItemMapper;
     private final CartMapper mapper;
+    private final ProductRepository productRepository;
 
-    public CartServiceImpl(UserService userService, CartRepository cartRepository, CartItemMapper cartItemMapper, CartMapper mapper) {
+    public CartServiceImpl(UserService userService, CartRepository cartRepository, CartItemMapper cartItemMapper, CartMapper mapper, ProductRepository productRepository) {
         this.userService = userService;
         this.cartRepository = cartRepository;
 
         this.cartItemMapper = cartItemMapper;
         this.mapper = mapper;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -40,19 +48,29 @@ public class CartServiceImpl implements CartService {
 
         var user = userService.getAuthenticatedUser();
         var cart = cartRepository.buscarPorUsuarioComItensEProdutos(user.getId()).orElse(null);
+        var product = productRepository.findById(itemRequest.productId()).orElseThrow(ProductNotFoundException::new);
 
         if (cart == null){
             cart = new Cart(user);
         }
 
-        var cartItem = cartItemMapper.toCartItem(itemRequest);
-        cartItem.setCart(cart);
+        var oprionalItem = buscarItemByProductId(itemRequest.productId(), cart.getItems());
+
+
+        if (oprionalItem.isPresent()){
+            var item = oprionalItem.get();
+            item.setQuantity(item.getQuantity() + itemRequest.quantity());
+            item.setUpdatedAt(LocalDateTime.now());
+            cart.setUpdatedAt(LocalDateTime.now());
+            cart = cartRepository.save(cart);
+            return mapper.toCartResponse(cart);
+        }
+
+        var cartItem = cartItemMapper.toCartItem(itemRequest, cart, product);
         cart.addItems(cartItem);
         cart = cartRepository.save(cart);
         return mapper.toCartResponse(cart);
     }
-
-
 
     @Override
     public CartResponse clearCart() {
@@ -71,5 +89,12 @@ public class CartServiceImpl implements CartService {
         itemUpdate.setQuantity(itemRequest.quantity());
         cart = cartRepository.save(cart);
         return mapper.toCartResponse(cart);
+    }
+
+    private static Optional<CartItem> buscarItemByProductId(Long productId, List<CartItem> items) {
+        return items
+                .stream()
+                .filter(cItem -> cItem.getProduct().getId().equals(productId))
+                .findFirst();
     }
 }

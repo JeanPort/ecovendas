@@ -18,7 +18,7 @@ public class Cart {
     private Long id;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     @OneToOne
     @JoinColumn(name = "user_id")
