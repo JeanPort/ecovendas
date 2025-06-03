@@ -51,6 +51,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(UnauthenticatedUser.class)
+    public ResponseEntity<ErrorResponse> handleUnauthenticatedUser(UnauthenticatedUser e){
+        var status = HttpStatus.UNAUTHORIZED;
+        var error = new ErrorResponse(
+                status.getReasonPhrase(),
+                e.getLocalizedMessage(),
+                status.value(),
+                e.getClass().getSimpleName(),
+                LocalDateTime.now());
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorValidateResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         var status = HttpStatus.BAD_REQUEST;

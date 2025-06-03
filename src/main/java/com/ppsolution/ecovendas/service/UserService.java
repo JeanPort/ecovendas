@@ -14,6 +14,5 @@ public interface UserService {
     List<UserResponse> findAllUser();
     UserResponse updateUser(Long id, UserRequest request);
     UserResponse updateUserAuthenticate(UserRequest request);
-    User getAuthenticatedUser();
 
 }

@@ -7,7 +7,7 @@ import com.ppsolution.ecovendas.mapper.AddressMapper;
 import com.ppsolution.ecovendas.model.Address;
 import com.ppsolution.ecovendas.repository.AddressRepository;
 import com.ppsolution.ecovendas.service.AddressService;
-import com.ppsolution.ecovendas.service.UserService;
+import com.ppsolution.ecovendas.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +17,18 @@ public class AddressServiceImpl implements AddressService {
 
 
     private final AddressRepository repository;
-    private final UserService userService;
+
     private final AddressMapper mapper;
 
 
-    public AddressServiceImpl(AddressRepository repository, UserService userService, AddressMapper mapper) {
+    public AddressServiceImpl(AddressRepository repository, AddressMapper mapper) {
         this.repository = repository;
-        this.userService = userService;
         this.mapper = mapper;
     }
 
     @Override
     public List<AddressResponse> findAllAddress() {
-        var user = userService.getAuthenticatedUser();
+        var user = SecurityUtil.getUserAuthenticated();
         var addressList = repository.findAllByUser(user);
         return addressList.stream().map(mapper::toAddressResponse).toList();
     }
@@ -60,14 +59,14 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponse insertAddress(AddressRequest addressRequest) {
         var address = mapper.toAddress(addressRequest);
-        var user = userService.getAuthenticatedUser();
+        var user = SecurityUtil.getUserAuthenticated();
         address.setUser(user);
         address = repository.save(address);
         return mapper.toAddressResponse(address);
     }
 
     private Address getAddress(Long id) {
-        var user = userService.getAuthenticatedUser();
+        var user = SecurityUtil.getUserAuthenticated();
         return repository.findByUserAndId(user, id).orElseThrow(NotFoundException::new);
     }
 }

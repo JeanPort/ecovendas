@@ -5,11 +5,9 @@ import com.ppsolution.ecovendas.dto.response.UserResponse;
 import com.ppsolution.ecovendas.exception.EmailAlreadyInUseException;
 import com.ppsolution.ecovendas.exception.UserNotFoundException;
 import com.ppsolution.ecovendas.mapper.UserMapper;
-import com.ppsolution.ecovendas.model.AuthenticatedUser;
-import com.ppsolution.ecovendas.model.User;
 import com.ppsolution.ecovendas.repository.UserRepository;
 import com.ppsolution.ecovendas.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.ppsolution.ecovendas.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUserAuthenticate() {
-        var user = getAuthenticatedUser();
+        var user = SecurityUtil.getUserAuthenticated();
         return userMapper.toUserResponse(user);
     }
 
@@ -64,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUserAuthenticate(UserRequest request) {
-        var user = getAuthenticatedUser();
+        var user = SecurityUtil.getUserAuthenticated();
         var userToUpdate = userMapper.toUser(request);
         userToUpdate.setId(user.getId());
         userToUpdate.setCreatedAt(user.getCreatedAt());
@@ -73,11 +71,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userToUpdate);
     }
 
-    @Override
-    public User getAuthenticatedUser() {
-        var authenticated = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return authenticated.getUser();
-    }
 
     private void existsId(String email, Long id) {
         if (userRepository.existsByEmailAndIdNot(email, id)){
