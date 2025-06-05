@@ -50,8 +50,6 @@ public class CartItemMapperImpl implements CartItemMapper {
         item.setProduct(product);
         item.setPrice(product.getPrice());
         item.setCart(cart);
-        item.setCreatedAt(LocalDateTime.now());
-        item.setUpdatedAt(LocalDateTime.now());
         return item;
     }
 

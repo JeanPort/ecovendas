@@ -1,0 +1,12 @@
+CREATE TABLE tbl_order (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    status VARCHAR(20) NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_method VARCHAR(20) NOT NULL,
+    user_id BIGINT NOT NULL,
+    address_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES tbl_user(id),
+    FOREIGN KEY (address_id) REFERENCES tbl_address(id)
+);

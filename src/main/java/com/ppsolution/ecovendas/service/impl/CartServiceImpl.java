@@ -13,10 +13,8 @@ import com.ppsolution.ecovendas.repository.CartRepository;
 import com.ppsolution.ecovendas.repository.ProductRepository;
 import com.ppsolution.ecovendas.service.CartService;
 import com.ppsolution.ecovendas.util.SecurityUtil;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -61,7 +59,6 @@ public class CartServiceImpl implements CartService {
         if (objectItem.isPresent()){
             var item = objectItem.get();
             item.setQuantity(itemRequest.quantity() + item.getQuantity());
-            item.setUpdatedAt(LocalDateTime.now());
         }else {
             var produtct = productRepository.findById(itemRequest.productId()).orElseThrow(ProductNotFoundException::new);
             var item = itemMapper.toCartItem(itemRequest, cart, produtct);
@@ -91,7 +88,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(CartItemNotFoundException::new);
     }
 
-    private Cart obterCartDoUserLogado() {
+    public Cart obterCartDoUserLogado() {
         var user = SecurityUtil.getUserAuthenticated();
         return cartRepository.buscarPorUsuarioComItensEProdutos(user.getId()).orElseGet(() -> criarCart(user));
     }

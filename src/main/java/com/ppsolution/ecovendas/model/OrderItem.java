@@ -7,22 +7,22 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tbl_cart_item")
-public class CartItem {
+@Table(name = "tbl_order_item")
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     @JsonIgnoreProperties("items")
-    private Cart cart;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Order order;
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -50,13 +50,12 @@ public class CartItem {
         this.price = price;
     }
 
-
-    public Cart getCart() {
-        return cart;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {
@@ -70,8 +69,8 @@ public class CartItem {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return Objects.equals(id, cartItem.id);
+        OrderItem orderItem = (OrderItem) o;
+        return Objects.equals(id, orderItem.id);
     }
 
     @Override
@@ -81,11 +80,11 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return "CartItem{" +
+        return "OrderItem{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", price=" + price +
-                ", cart=" + cart +
+                ", order=" + order +
                 ", product=" + product +
                 '}';
     }
