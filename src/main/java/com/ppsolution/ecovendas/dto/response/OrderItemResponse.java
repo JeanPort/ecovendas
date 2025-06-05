@@ -6,13 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CartItemResponse(
+public record OrderItemResponse(
         Long id,
         Long productId,
         String productName,
         BigDecimal price,
         Integer quantity,
-        BigDecimal subTotal,
-        String imgUrl
+        BigDecimal subTotal
 ) {
 }
